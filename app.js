@@ -4,7 +4,7 @@ const colors=['#f2c971','#f1b9ab','#a9d4cc','#c8c0ed','#f7cfab','#b8cbe9','#ebc3
 const displayName=s=>({'술에-취하면-안-돼':'술에 취하면 안 돼!','흉수':'흉수凶獸','국힙은-여친이-필요해':'국힙은 여친이 필요해♡'}[s]||s.replace(/-/g,' '));
 function folderIcon(i){const c=colors[i%colors.length];return '<svg class="folder-svg" viewBox="0 0 160 133" aria-hidden="true"><defs><linearGradient id="g'+i+'" x1="0" x2=".2" y2="1"><stop stop-color="#fff7cd"/><stop offset="1" stop-color="'+c+'"/></linearGradient></defs><path d="M8 37Q8 22 23 22H56L69 35H139Q153 35 153 49V111Q153 125 139 125H21Q8 125 8 111Z" fill="#be914a"/><path d="M14 40Q14 28 27 28H53L66 41H137Q147 41 147 51V110Q147 118 138 118H23Q14 118 14 108Z" fill="url(#g'+i+')"/><path d="M11 62Q11 54 22 54H145V113Q145 121 135 121H24Q11 121 11 110Z" fill="'+c+'" stroke="#c39955" stroke-width="3"/><path d="M24 65H135" stroke="white" stroke-opacity=".55" stroke-width="3"/></svg>'}
 function dataset(){return selected?selected.characters:WORLDS}
-function characterLabel(world,character){return CHARACTER_NAMES[world]?.[character.name]||character.name}
+function characterLabel(world,character){return character.displayName||CHARACTER_NAMES?.[world]?.[character.name]||character.name}
 function normalizedCharacters(world){
  const copy=world.characters.filter(c=>c.name!=='leeihhu').map(c=>({...c,images:[...c.images]}));
  if(world.name==='LOVE-PARANOIA'){
