@@ -54,7 +54,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;bac
 #intro{background:#000!important;background-image:none!important}
 .intro-stars{display:none!important}
 .shell{position:relative;padding-top:calc(env(safe-area-inset-top) + 115px)}
-.halloween-garlands{position:absolute;top:calc(env(safe-area-inset-top) + 5px);left:-10px;width:calc(100% + 20px);height:105px;pointer-events:none;object-fit:fill;z-index:0}
+.halloween-garlands{position:absolute;top:calc(env(safe-area-inset-top) + 5px);left:-10px;width:calc(100% + 20px);height:105px;pointer-events:none;object-fit:fill;z-index:0;opacity:.7}
 .shell>.top,.shell>.line,.shell>.view,.shell>.note{position:relative;z-index:1}
 @media(min-width:700px){.shell{padding-top:calc(env(safe-area-inset-top) + 145px)}.halloween-garlands{height:135px}}
 @media(max-width:370px){.shell{padding-top:calc(env(safe-area-inset-top) + 100px)}.halloween-garlands{height:92px}}
