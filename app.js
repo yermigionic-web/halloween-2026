@@ -4,13 +4,40 @@ const colors=['#f2c971','#f1b9ab','#a9d4cc','#c8c0ed','#f7cfab','#b8cbe9','#ebc3
 const displayName=s=>({'술에-취하면-안-돼':'술에 취하면 안 돼!','흉수':'흉수凶獸','국힙은-여친이-필요해':'국힙은 여친이 필요해♡'}[s]||s.replace(/-/g,' '));
 function folderIcon(i){const c=colors[i%colors.length];return '<svg class="folder-svg" viewBox="0 0 160 133" aria-hidden="true"><defs><linearGradient id="g'+i+'" x1="0" x2=".2" y2="1"><stop stop-color="#fff7cd"/><stop offset="1" stop-color="'+c+'"/></linearGradient></defs><path d="M8 37Q8 22 23 22H56L69 35H139Q153 35 153 49V111Q153 125 139 125H21Q8 125 8 111Z" fill="#be914a"/><path d="M14 40Q14 28 27 28H53L66 41H137Q147 41 147 51V110Q147 118 138 118H23Q14 118 14 108Z" fill="url(#g'+i+')"/><path d="M11 62Q11 54 22 54H145V113Q145 121 135 121H24Q11 121 11 110Z" fill="'+c+'" stroke="#c39955" stroke-width="3"/><path d="M24 65H135" stroke="white" stroke-opacity=".55" stroke-width="3"/></svg>'}
 function dataset(){return selected?selected.characters:WORLDS}
-function render(){const items=dataset(),max=Math.max(1,Math.ceil(items.length/6));page=Math.max(0,Math.min(page,max-1));summary.textContent='터치하여 할로윈 이미지 오픈!';back.hidden=!selected;root.innerHTML='';items.slice(page*6,page*6+6).forEach((v,idx)=>{let el=document.createElement('button');el.className='tile';let art=selected?(v.thumb?'<img class="char-thumb" src="'+v.thumb+'" loading="lazy" alt="">':folderIcon(idx)) :folderIcon(page*6+idx);el.innerHTML=art+'<span class="folder-name">'+escapeHTML(displayName(v.name))+'</span>'+(selected?'<small>'+galleryImages(v).length+' 장</small>':'');el.addEventListener('click',()=>{if(selected){if(galleryImages(v).length)openGallery(v);return}selected=v;page=0;render()});root.appendChild(el)});if(!root.children.length)root.innerHTML='<div class="empty">EMPTY FOLDER</div>';document.getElementById('range').textContent=String(page*6+1).padStart(2,'0')+' — '+String(Math.min(items.length,page*6+6)).padStart(2,'0');document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page===max-1;document.getElementById('dots').innerHTML=Array.from({length:max},(_,i)=>'<span class="dot '+(i===page?'on':'')+'"></span>').join('')}
+function characterLabel(world,character){return CHARACTER_NAMES[world]?.[character.name]||character.name}
+function normalizedCharacters(world){
+ const copy=world.characters.filter(c=>c.name!=='leeihhu').map(c=>({...c,images:[...c.images]}));
+ if(world.name==='LOVE-PARANOIA'){
+  const lee=copy.find(c=>c.name==='leeihu');
+  const orphan=world.characters.find(c=>c.name==='leeihhu');
+  if(lee&&orphan)lee.images=[...orphan.images,...lee.images].sort((a,b)=>/illust-1/.test(a)?-1:/illust-1/.test(b)?1:a.localeCompare(b));
+ }
+ if(world.name==='현재-궤도-감정-없음'&&!copy.some(c=>c.name==='yoyo')){
+  copy.splice(1,0,{name:'yoyo',thumb:null,images:[],decoration:true});
+ }
+ const order=Object.keys(CHARACTER_NAMES[world.name]||{});
+ return copy.sort((a,b)=>order.indexOf(a.name)-order.indexOf(b.name));
+}
+function attachFloatingYoyo(){
+ document.querySelector('.floating-yoyo')?.remove();
+ if(selected?.name!=='현재-궤도-감정-없음')return;
+ const y=document.createElement('button');
+ y.className='floating-yoyo';y.type='button';y.setAttribute('aria-label','요요 장식 튀어오르기');
+ const image=document.createElement('img');
+ image.src='assets/'+encodeURIComponent(selected.name)+'/yoyo-floating-sd.png';
+ image.alt='둥둥 떠다니는 요요';
+ y.append(image);
+ y.addEventListener('click',()=>{y.classList.remove('boing');void y.offsetWidth;y.classList.add('boing')});
+ y.addEventListener('animationend',e=>{if(e.animationName==='yoyoBoing')y.classList.remove('boing')});
+ document.querySelector('.view').append(y);
+}
+function render(){const items=selected?normalizedCharacters(selected):WORLDS,max=Math.max(1,Math.ceil(items.length/6));page=Math.max(0,Math.min(page,max-1));summary.textContent='터치하여 할로윈 이미지 오픈!';back.hidden=!selected;root.innerHTML='';items.slice(page*6,page*6+6).forEach((v,idx)=>{let el=document.createElement('button');el.className='tile';let art=selected?(v.decoration?'<span class="yoyo-placeholder">👽</span>':v.thumb?'<img class="char-thumb" src="'+v.thumb+'" loading="lazy" alt="">':folderIcon(idx)) :folderIcon(page*6+idx);el.innerHTML=art+'<span class="folder-name">'+escapeHTML(selected?characterLabel(selected,v):displayName(v.name))+'</span>'+(selected?'<small>'+galleryImages(v).length+' 장</small>':'');el.addEventListener('click',()=>{if(selected){if(v.decoration){document.querySelector('.floating-yoyo')?.click();return}if(galleryImages(v).length)openGallery(v);return}selected=v;page=0;render()});root.appendChild(el)});if(!root.children.length)root.innerHTML='<div class="empty">EMPTY FOLDER</div>';document.getElementById('range').textContent=String(page*6+1).padStart(2,'0')+' — '+String(Math.min(items.length,page*6+6)).padStart(2,'0');document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page===max-1;document.getElementById('dots').innerHTML=Array.from({length:max},(_,i)=>'<span class="dot '+(i===page?'on':'')+'"></span>').join('');attachFloatingYoyo()}
 function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function changePage(d){const now=Date.now();if(now-lock<550)return;const max=Math.ceil(dataset().length/6);if(page+d<0||page+d>=max)return;lock=now;page+=d;render()}
 document.getElementById('prev').onclick=()=>changePage(-1);document.getElementById('next').onclick=()=>changePage(1);back.onclick=()=>{selected=null;page=0;render()};
 function galleryImages(v){return [v.thumb,...v.images].filter(Boolean)}
 function openGallery(v){viewer=v;imageIndex=0;document.getElementById('gallery').classList.add('open');document.body.style.overflow='hidden';updateGallery()}
-function updateGallery(){const images=galleryImages(viewer),url=images[imageIndex];document.getElementById('viewer-img').src=url;document.getElementById('viewer-title').textContent=displayName(viewer.name);document.getElementById('counter').textContent=(imageIndex+1)+' / '+images.length;const dl=document.getElementById('download');dl.href=url;dl.download=decodeURIComponent(url.split('/').pop())}
+function updateGallery(){const images=galleryImages(viewer),url=images[imageIndex];document.getElementById('viewer-img').src=url;document.getElementById('viewer-title').textContent=characterLabel(selected,viewer);document.getElementById('counter').textContent=(imageIndex+1)+' / '+images.length;const dl=document.getElementById('download');dl.href=url;dl.download=decodeURIComponent(url.split('/').pop())}
 function stepImage(d){if(!viewer)return;const length=galleryImages(viewer).length;imageIndex=(imageIndex+d+length)%length;updateGallery()}
 function closeGallery(){document.getElementById('gallery').classList.remove('open');document.body.style.overflow='';viewer=null}
 document.getElementById('close').onclick=closeGallery;document.getElementById('imgprev').onclick=()=>stepImage(-1);document.getElementById('imgnext').onclick=()=>stepImage(1);
