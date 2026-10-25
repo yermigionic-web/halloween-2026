@@ -1,0 +1,76 @@
+:root{font-family:ui-rounded,"SF Pro Rounded","Trebuchet MS",system-ui,-apple-system,sans-serif;color:#f9f7f1;background:#171c30;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(circle at 15% 5%,#3c325c 0,transparent 42%),radial-gradient(circle at 95% 85%,#322e53 0,transparent 52%),#171c30}button{font:inherit}button:focus-visible{outline:3px solid #f8ca66;outline-offset:4px}#app{min-height:100svh}#intro{position:fixed;inset:0;z-index:10;background:#171c30;display:grid;place-content:center;text-align:center;padding:24px;transition:opacity .65s,visibility .65s;overflow:hidden}#intro.hide{opacity:0;visibility:hidden;pointer-events:none}.intro-stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#f9d99e 1px,transparent 1px);background-size:47px 47px;opacity:.17}.intro-center{position:relative;width:min(80vw,330px);margin:auto}.intro-center svg{width:100%;filter:drop-shadow(0 22px 30px #0008);transition:transform .35s}.intro-center.pressed svg{transform:scale(.88) rotate(-5deg)}.cursor{position:absolute;right:-12%;bottom:-7%;font-size:42px;filter:drop-shadow(2px 4px 1px #12111a);transform:rotate(-20deg);animation:cursorMove 2.7s ease-in-out forwards;pointer-events:none}.cursor:after{content:"↖";font-size:42px;color:white;text-shadow:2px 2px #111;position:absolute;left:-22px;top:-30px}@keyframes cursorMove{0%{transform:translate(45px,35px) rotate(-20deg)}60%{transform:translate(-45px,-35px) rotate(-20deg) scale(1)}70%{transform:translate(-45px,-35px) rotate(-20deg) scale(.8)}85%,100%{transform:translate(-45px,-35px) rotate(-20deg) scale(1)}}.intro-title{position:relative;letter-spacing:.3em;font-size:12px;font-weight:800;margin:36px 0 9px}.intro-hint{position:relative;opacity:.65;font-size:12px}.skip{position:absolute;right:22px;top:calc(env(safe-area-inset-top) + 24px);z-index:2;border:1px solid #ffffff55;background:#ffffff13;color:white;padding:9px 15px;border-radius:22px;cursor:pointer}.shell{max-width:690px;min-height:100svh;margin:auto;padding:calc(env(safe-area-inset-top) + 25px) 20px calc(env(safe-area-inset-bottom) + 35px);display:flex;flex-direction:column}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.eyebrow{font-size:10px;letter-spacing:.27em;opacity:.6;font-weight:800}.brand{font-size:clamp(21px,5vw,31px);font-weight:900;letter-spacing:-.055em;margin:7px 0 0}.pill{color:#f8e8d9;background:#ffffff14;border:1px solid #ffffff2f;border-radius:30px;padding:9px 12px;font-size:11px;white-space:nowrap}.line{height:1px;background:#ffffff2a;margin:23px 0 18px}.crumb{border:0;background:transparent;color:#ffdb8e;padding:0;cursor:pointer;font-weight:700;font-size:12px}.summary{color:#d6d4e4;font-size:12px;margin:10px 0 0}.view{flex:1;display:flex;flex-direction:column}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(130px,1fr));gap:16px 9px;flex:1;align-items:center;padding:25px 0 8px;min-height:400px}.tile{border:0;background:transparent;color:inherit;display:flex;align-items:center;flex-direction:column;gap:10px;cursor:pointer;padding:9px 3px;min-width:0;transition:transform .22s}.tile:active{transform:scale(.92)}.folder-svg{width:100%;max-width:127px;overflow:visible;filter:drop-shadow(0 7px 8px #0004)}.folder-name{text-align:center;font-size:clamp(11px,2.9vw,14px);font-weight:750;line-height:1.45;word-break:keep-all;overflow-wrap:anywhere;min-height:2.8em}.tile small{font-size:10px;color:#c4c0d5}.char-thumb{width:100%;max-width:120px;aspect-ratio:1.06;object-fit:contain;filter:drop-shadow(0 7px 9px #0007)}.footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;color:#bebbd1;font-size:11px}.pager{display:flex;align-items:center;gap:11px}.round{width:36px;height:36px;border:1px solid #ffffff42;border-radius:50%;background:#ffffff10;color:white;cursor:pointer}.round:disabled{opacity:.23;cursor:not-allowed}.dots{display:flex;justify-content:center;gap:6px}.dot{width:5px;height:5px;background:#ffffff40;border-radius:9px}.dot.on{width:18px;background:#f2ce7b}.empty{grid-column:1/-1;text-align:center;color:#ffffff77}.gallery{position:fixed;inset:0;z-index:15;background:#0c0c17f5;display:none;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 16px) 14px calc(env(safe-area-inset-bottom) + 18px)}.gallery.open{display:flex}.viewer-bar{width:100%;max-width:700px;display:flex;justify-content:space-between;align-items:center;color:white;gap:12px}.viewer-bar button,.download{border:1px solid #ffffff55;border-radius:26px;background:#ffffff18;color:white;padding:10px 15px;cursor:pointer;text-decoration:none;font-size:13px}.viewer-img{flex:1;min-height:0;width:100%;object-fit:contain;margin:15px 0}.viewer-bottom{display:flex;align-items:center;justify-content:center;gap:20px}.note{font-size:10px;opacity:.58;margin-top:15px;text-align:center}@media(min-width:700px){.shell{padding-top:45px}.grid{gap:20px 25px}.folder-svg{max-width:145px}.cursor{font-size:48px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Halloween refresh — night violet, glowing pumpkins, soft iOS interaction */
+:root{background:#21132e;color:#fff8ed;color-scheme:dark}
+body{
+ background:
+ radial-gradient(ellipse 65% 48% at 3% 4%,rgba(254,116,39,.32),transparent 80%),
+ radial-gradient(ellipse 70% 48% at 97% 83%,rgba(154,72,174,.32),transparent 80%),
+ radial-gradient(ellipse 52% 45% at 48% 51%,rgba(120,67,141,.16),transparent 85%),
+ linear-gradient(150deg,#291332 0%,#19152d 48%,#311a44 100%);
+ background-attachment:fixed;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;background:radial-gradient(ellipse at 53% 0%,#f2b65b22,transparent 40%),radial-gradient(ellipse at 50% 100%,#f9742d18,transparent 43%)}
+#intro{background:radial-gradient(ellipse at 50% 38%,#54304a 0%,#21152d 65%,#130f23 100%)}
+.intro-stars{opacity:.4;background-image:radial-gradient(#ffdca9 1px,transparent 1px),radial-gradient(#f9a25c 1.5px,transparent 1.5px);background-size:37px 37px,113px 113px;background-position:0 0,25px 38px}
+.intro-center{width:min(88vw,390px);cursor:pointer}
+.intro-center svg{display:block;width:100%;filter:drop-shadow(0 19px 19px #09071073);transform-origin:54% 70%;animation:folderFloat 2.7s ease-in-out infinite}
+.intro-center.pressed svg{animation:none;transform:scale(.94) rotate(-3deg)}
+@keyframes folderFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(0deg)}}
+.cursor{right:1%;bottom:-4%;font-size:38px;animation:cursorMove 2.75s cubic-bezier(.27,.8,.3,1) forwards;z-index:4}
+.cursor:after{content:"➤";font-family:system-ui;font-size:25px;font-weight:900;position:absolute;top:-11px;left:-15px;transform:rotate(-133deg);color:#fef9e8;text-shadow:1.5px 2px #23152e,-1px -1px #23152e}
+@keyframes cursorMove{0%{transform:translate(65px,40px) rotate(-12deg)}61%{transform:translate(-39px,-29px) rotate(-12deg) scale(1)}69%{transform:translate(-39px,-29px) rotate(-12deg) scale(.83)}80%,100%{transform:translate(-39px,-29px) rotate(-12deg) scale(1)}}
+.intro-title{font-size:14px;letter-spacing:.2em;margin-top:20px;color:#fff4ce}
+.intro-hint{color:#f5dcca;font-size:12px}
+.skip{background:#ffffff1c;border-color:#ffffff50}
+.shell{position:relative;max-width:720px;padding-top:calc(env(safe-area-inset-top) + 29px);padding-bottom:calc(env(safe-area-inset-bottom) + 25px)}
+.top{align-items:flex-start}
+.brand{margin:0;line-height:1.32;font-size:clamp(20px,4.9vw,32px);font-weight:850;letter-spacing:-.035em;color:#fff4dd;text-shadow:0 2px 15px #ffbf6a30}
+.brand span{color:#ffc86a;font-size:.8em}
+.pill{border:1px solid #d9a96877;background:linear-gradient(135deg,#663e5ac7,#443159bd);color:#ffe5af;box-shadow:inset 0 1px #ffffff20;padding:9px 10px;font-weight:750;font-size:clamp(10px,2.4vw,12px)}
+.line{margin:19px 0 13px;background:linear-gradient(90deg,#ffb7638c,#b782d34a,#ffffff00)}
+.summary{font-size:13px;font-weight:650;letter-spacing:-.01em;color:#ffdda1;margin:0;padding:2px 0}
+.crumb{display:block;margin:1px 0 9px;color:#fcd196}
+.crumb[hidden]{display:none}
+.grid{padding:22px 0 8px;gap:16px 10px}
+.tile{gap:9px;border-radius:17px;transition:transform .22s,background .22s}
+.tile:hover{background:#ffffff0b;transform:translateY(-3px)}
+.tile:active{transform:scale(.95)}
+.folder-svg{filter:drop-shadow(0 10px 9px #0905145c)}
+.folder-name{color:#fff7ef;font-weight:780;text-shadow:0 2px 9px #0008}
+.char-thumb{filter:drop-shadow(0 8px 9px #09051288)}
+.tile small{color:#e0bfd6}
+.footer{color:#e9d1cf;margin-top:16px}
+.round{background:#ffffff17;border-color:#ffffff48;box-shadow:inset 0 1px #ffffff23}
+.round:not(:disabled):hover{background:#e9a96745}
+.dot.on{background:#ffc477}
+.gallery{background:radial-gradient(ellipse at 50% 25%,#46304dee,#130e21 80%)}
+.download{background:#cc7a43b3;color:#fffbea;border-color:#ffd1a783;font-weight:800}
+@media(max-width:370px){.top{gap:7px}.pill{padding:7px 8px}.brand{font-size:19px}.grid{min-height:350px;gap:8px 5px}.folder-name{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.intro-center svg{animation:none}}
+
+
+/* Halloween garlands and clean black opening */
+#intro{background:#000!important;background-image:none!important}
+.intro-stars{display:none!important}
+.shell{position:relative;padding-top:calc(env(safe-area-inset-top) + 115px)}
+.halloween-garlands{position:absolute;top:calc(env(safe-area-inset-top) + 5px);left:-10px;width:calc(100% + 20px);height:105px;pointer-events:none;object-fit:fill;z-index:0}
+.shell>.top,.shell>.line,.shell>.view,.shell>.note{position:relative;z-index:1}
+@media(min-width:700px){.shell{padding-top:calc(env(safe-area-inset-top) + 145px)}.halloween-garlands{height:135px}}
+@media(max-width:370px){.shell{padding-top:calc(env(safe-area-inset-top) + 100px)}.halloween-garlands{height:92px}}
+
+/* iOS-native system typography — no third-party font download needed. */
+:root{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  font-synthesis:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body{font-family:inherit;letter-spacing:-.015em}
+button{font-family:inherit}
+.brand{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-weight:750;letter-spacing:-.042em}
+.folder-name{font-weight:650;letter-spacing:-.035em;line-height:1.45}
+.summary{font-weight:530;letter-spacing:-.025em}
+.pill{font-weight:650;letter-spacing:-.02em}
+.crumb{font-weight:650}
+.intro-title{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Apple SD Gothic Neo",system-ui,sans-serif;font-weight:750}
