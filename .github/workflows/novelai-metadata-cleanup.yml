@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/novelai-metadata-cleanup.yml'
+      - 'scripts/strip_novelai_metadata.py'
+      - 'index.html'
   workflow_dispatch:
 
 permissions:
