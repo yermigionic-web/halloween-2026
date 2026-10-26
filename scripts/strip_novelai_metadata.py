@@ -14,7 +14,7 @@ def clean_png(path: Path):
         return "not_png"
     pos = 8
     chunks = []
-    novelai = False
+    removed = 0
     while pos + 12 <= len(data):
         start = pos
         n = struct.unpack_from(">I", data, pos)[0]
@@ -27,17 +27,15 @@ def clean_png(path: Path):
         if zlib.crc32(kind + payload) & 0xffffffff != crc:
             return "invalid"
         if kind in TEXT_CHUNKS:
-            key = payload.split(b"\x00", 1)[0].lower()
-            if b"novelai" in key or b"novelai" in payload[:4096].lower():
-                novelai = True
+            removed += 1
         chunks.append((kind, data[start:end]))
         pos = end
         if kind == b"IEND":
             break
     if not chunks or chunks[-1][0] != b"IEND" or pos != len(data):
         return "invalid"
-    if not novelai:
-        return "other"
+    if not removed:
+        return "already_clean"
     cleaned = PNG_SIGNATURE + b"".join(
         raw for kind, raw in chunks if kind not in TEXT_CHUNKS
     )
