@@ -28,13 +28,43 @@ function attachFloatingYoyo(){
  y.addEventListener('animationend',e=>{if(e.animationName==='yoyoBoing')y.classList.remove('boing')});
  document.querySelector('.view').append(y);
 }
-function render(){const items=selected?normalizedCharacters(selected):WORLDS,max=Math.max(1,Math.ceil(items.length/6));page=Math.max(0,Math.min(page,max-1));summary.textContent='터치하여 할로윈 이미지 오픈!';back.hidden=!selected;root.innerHTML='';items.slice(page*6,page*6+6).forEach((v,idx)=>{let el=document.createElement('button');el.className='tile';let art=selected?(v.thumb?'<img class="char-thumb" src="'+v.thumb+'" loading="lazy" alt="">':folderIcon(idx)) :folderIcon(page*6+idx);el.innerHTML=art+'<span class="folder-name">'+escapeHTML(selected?characterLabel(selected,v):displayName(v.name))+'</span>'+(selected?'<small>'+galleryImages(v).length+' 장</small>':'');el.addEventListener('click',()=>{if(selected){if(galleryImages(v).length)openGallery(v);return}selected=v;page=0;render()});root.appendChild(el)});if(!root.children.length)root.innerHTML='<div class="empty">EMPTY FOLDER</div>';document.getElementById('range').textContent=String(page*6+1).padStart(2,'0')+' — '+String(Math.min(items.length,page*6+6)).padStart(2,'0');document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page===max-1;document.getElementById('dots').innerHTML=Array.from({length:max},(_,i)=>'<span class="dot '+(i===page?'on':'')+'"></span>').join('');attachFloatingYoyo()}
+function render(){const items=selected?normalizedCharacters(selected):WORLDS,max=Math.max(1,Math.ceil(items.length/6));page=Math.max(0,Math.min(page,max-1));summary.textContent='터치하여 할로윈 이미지 오픈!';back.hidden=!selected;root.innerHTML='';items.slice(page*6,page*6+6).forEach((v,idx)=>{let el=document.createElement('button');el.className='tile';if(selected&&v.thumb){const img=document.createElement('img');img.className='char-thumb';img.src=v.thumb;img.loading='lazy';img.alt='';el.append(img)}else{el.innerHTML=folderIcon(selected?idx:page*6+idx)}const label=document.createElement('span');label.className='folder-name';label.textContent=selected?characterLabel(selected,v):displayName(v.name);el.append(label);if(selected){const count=document.createElement('small');count.textContent=galleryImages(v).length+' 장';el.append(count)}el.addEventListener('click',()=>{if(selected){if(galleryImages(v).length)openGallery(v);return}selected=v;page=0;render()});root.appendChild(el)});if(!root.children.length)root.innerHTML='<div class="empty">EMPTY FOLDER</div>';document.getElementById('range').textContent=String(page*6+1).padStart(2,'0')+' — '+String(Math.min(items.length,page*6+6)).padStart(2,'0');document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page===max-1;document.getElementById('dots').innerHTML=Array.from({length:max},(_,i)=>'<span class="dot '+(i===page?'on':'')+'"></span>').join('');attachFloatingYoyo()}
 function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function changePage(d){const now=Date.now();if(now-lock<550)return;const max=Math.ceil(dataset().length/6);if(page+d<0||page+d>=max)return;lock=now;page+=d;render()}
 document.getElementById('prev').onclick=()=>changePage(-1);document.getElementById('next').onclick=()=>changePage(1);back.onclick=()=>{selected=null;page=0;render()};
 function galleryImages(v){return [v.thumb,...v.images].filter(Boolean)}
 function openGallery(v){viewer=v;imageIndex=0;document.getElementById('gallery').classList.add('open');document.body.style.overflow='hidden';updateGallery()}
-function updateGallery(){const images=galleryImages(viewer),url=images[imageIndex];document.getElementById('viewer-img').src=url;document.getElementById('viewer-title').textContent=characterLabel(selected,viewer);document.getElementById('counter').textContent=(imageIndex+1)+' / '+images.length;const dl=document.getElementById('download');dl.href=url;dl.download=decodeURIComponent(url.split('/').pop())}
+function updateGallery(){const images=galleryImages(viewer),url=images[imageIndex];document.getElementById('viewer-img').src=url;document.getElementById('viewer-title').textContent=characterLabel(selected,viewer);document.getElementById('counter').textContent=(imageIndex+1)+' / '+images.length;const dl=document.getElementById('download');dl.removeAttribute('href');dl.dataset.source=url;dl.download=decodeURIComponent(url.split('/').pop()).replace(/\.[^.]+$/, '')+'.png'}
+// Re-encode displayed image pixels into a new PNG. Source EXIF/text chunks are not copied.
+async function downloadCleanImage(event){
+ event.preventDefault();
+ const link=event.currentTarget,source=link.dataset.source;
+ if(!source||link.dataset.busy==='1')return;
+ link.dataset.busy='1';link.setAttribute('aria-disabled','true');
+ const previous=link.textContent;link.textContent='이미지 준비 중…';
+ try{
+  const image=new Image();
+  image.decoding='async';
+  image.src=source;
+  await image.decode();
+  if(!image.naturalWidth||!image.naturalHeight)throw new Error('Invalid image');
+  const canvas=document.createElement('canvas');
+  canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('Canvas unavailable');
+  ctx.drawImage(image,0,0);
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('PNG conversion failed')),'image/png'));
+  const objectUrl=URL.createObjectURL(blob);
+  try{
+   const a=document.createElement('a');a.href=objectUrl;a.download=link.download||'image.png';
+   document.body.append(a);a.click();a.remove();
+  }finally{setTimeout(()=>URL.revokeObjectURL(objectUrl),60000)}
+ }catch(error){
+  console.error('Clean image download failed',error);
+  alert('안전한 이미지 저장에 실패했습니다. 다른 브라우저에서 다시 시도해 주세요.');
+ }finally{link.textContent=previous;link.removeAttribute('aria-disabled');delete link.dataset.busy}
+}
+document.getElementById('download').addEventListener('click',downloadCleanImage);
 function stepImage(d){if(!viewer)return;const length=galleryImages(viewer).length;imageIndex=(imageIndex+d+length)%length;updateGallery()}
 function closeGallery(){document.getElementById('gallery').classList.remove('open');document.body.style.overflow='';viewer=null}
 document.getElementById('close').onclick=closeGallery;document.getElementById('imgprev').onclick=()=>stepImage(-1);document.getElementById('imgnext').onclick=()=>stepImage(1);
