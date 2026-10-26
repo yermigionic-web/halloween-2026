@@ -1,0 +1,31 @@
+name: One-time NovelAI PNG metadata cleanup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/novelai-metadata-cleanup.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Strip only text chunks from NovelAI-tagged PNGs
+        run: python3 scripts/strip_novelai_metadata.py
+      - name: Commit sanitized images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- assets
+          if ! git diff --cached --quiet; then
+            git commit -m "Remove NovelAI generation metadata from PNG images"
+            git push
+          fi
