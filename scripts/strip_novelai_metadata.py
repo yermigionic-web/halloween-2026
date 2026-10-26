@@ -51,9 +51,16 @@ def main():
     for path in Path("assets").rglob("*.png"):
         result = clean_png(path)
         counts[result] = counts.get(result, 0) + 1
-    print("NovelAI PNG metadata cleanup:", counts)
+    print("PNG text metadata cleanup:", counts)
     if counts.get("invalid"):
         raise SystemExit("Some PNG files failed structural or CRC checks")
+    if counts.get("other"):
+        raise SystemExit("Unexpected PNG metadata scan result")
+    if counts.get("cleaned"):
+        remaining = [str(p) for p in Path("assets").rglob("*.png") if clean_png(p) != "already_clean"]
+        if remaining:
+            raise SystemExit("Post-cleanup verification failed: " + ", ".join(remaining[:5]))
+    print("Verified: all scanned PNGs have no tEXt/zTXt/iTXt chunks")
 
 if __name__ == "__main__":
     main()
